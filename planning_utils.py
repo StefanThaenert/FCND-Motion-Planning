@@ -55,6 +55,10 @@ class Action(Enum):
     EAST = (0, 1, 1)
     NORTH = (-1, 0, 1)
     SOUTH = (1, 0, 1)
+    NORTH_WEST = (-1, -1, np.sqrt(2))
+    NORTH_EAST = (-1, 1, np.sqrt(2))
+    SOUTH_WEST = (1, -1, np.sqrt(2))
+    SOUTH_EAST = (1, 1, np.sqrt(2))
 
     @property
     def cost(self):
@@ -84,6 +88,14 @@ def valid_actions(grid, current_node):
         valid_actions.remove(Action.WEST)
     if y + 1 > m or grid[x, y + 1] == 1:
         valid_actions.remove(Action.EAST)
+    if (x - 1 < 0 or y - 1 < 0) or grid[x - 1, y - 1] == 1:
+        valid_actions.remove(Action.NORTH_WEST)
+    if (x - 1 < 0 or y + 1 > m) or grid[x - 1, y + 1] == 1:
+        valid_actions.remove(Action.NORTH_EAST)
+    if (x + 1 > n or y - 1 < 0) or grid[x + 1, y - 1] == 1:
+        valid_actions.remove(Action.SOUTH_WEST)
+    if (x + 1 > n or y + 1 > m) or grid[x + 1, y + 1] == 1:
+        valid_actions.remove(Action.SOUTH_EAST)
 
     return valid_actions
 
@@ -139,8 +151,37 @@ def a_star(grid, h, start, goal):
         print('**********************') 
     return path[::-1], path_cost
 
-
-
 def heuristic(position, goal_position):
     return np.linalg.norm(np.array(position) - np.array(goal_position))
 
+def prune_path(path, eps):
+    pruned_path = [p for p in path]
+    
+    i = 0
+    while i < len(pruned_path) - 2:
+        p1 = point(pruned_path[i])
+        p2 = point(pruned_path[i+1])
+        p3 = point(pruned_path[i+2])
+        
+      
+        if collinearity_check(p1, p2, p3, eps):
+            pruned_path.remove(pruned_path[i+1])
+        else:
+            i += 1
+    return pruned_path
+
+def point(p):
+    return np.array([p[0], p[1], 1.]).reshape(1, -1)
+
+def collinearity_check(p1, p2, p3, epsilon=5e-0):   
+    m = np.concatenate((p1, p2, p3), 0)
+    det = np.linalg.det(m)
+    return abs(det) < epsilon
+
+def find_start_goal(skel, start, goal):
+    skel_cells = np.transpose(skel.nonzero())
+    start_min_dist = np.linalg.norm(np.array(start) - np.array(skel_cells), axis=1).argmin()
+    near_start = skel_cells[start_min_dist]
+    goal_min_dist = np.linalg.norm(np.array(goal) - np.array(skel_cells), axis=1).argmin()
+    near_goal = skel_cells[goal_min_dist]
+    return near_start, near_goal
