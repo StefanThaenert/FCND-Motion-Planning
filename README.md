@@ -32,8 +32,6 @@ Unfortunatly there is a bug at least in the windows version of the simulator. Th
 For this project two scripts are provided, `motion_planning.py` and `planning_utils.py`. Here you'll also find a file called `colliders.csv`, which contains the 2.5D map of the simulator environment. 
 
 ## Summary: Write it up!
-When you're finished, complete a detailed writeup of your solution and discuss how you addressed each step. You can use the [`writeup_template.md`](./writeup_template.md) provided here or choose a different format, just be sure to describe clearly the steps you took and code you used to address each point in the [rubric](https://review.udacity.com/#!/rubrics/1534/view). And have fun!
-
 
 ### What's going on in  `motion_planning.py` and `planning_utils.py`
 
@@ -75,7 +73,7 @@ python motion_planning.py
 Everything described so far refers to python files that control the drone in the simulator. In A-Star-grid-vs-graph.ipynb the procedure for determining the path is shown. Not only the grid is used but also the graph. For a better understanding the single steps are shown in different images. The functions from motion_planning.py and planning_utilitys.py are reused.
 
 ### Adjust your deadbands
-The size of the deadbands around your waypoints is defined with a fixed value of 1. This causes the drone to fly over the waypoints or tries to stop. To ensure a smooth transition to the next waypoint this limit can be increased to 10. However, it is better to introduce a speed dependency. This was done in [here] (https://github.com/StefanThaenert/FCND-Motion-Planning/blob/master/motion_planning.py#L49). However, this measure leads to the fact that the last waypoint is not approached exactly. Therefore [here] (https://github.com/StefanThaenert/FCND-Motion-Planning/blob/master/motion_planning.py#L53) an additional condition was introduced before the drone is allowed to land.
+The size of the deadbands around your waypoints is defined with a fixed value of 1. This causes the drone to fly over the waypoints or tries to stop. To ensure a smooth transition to the next waypoint this limit can be increased to 10. However, it is better to introduce a speed dependency. This was done in [here](https://github.com/StefanThaenert/FCND-Motion-Planning/blob/master/motion_planning.py#L49). However, this measure leads to the fact that the last waypoint is not approached exactly. Therefore [here](https://github.com/StefanThaenert/FCND-Motion-Planning/blob/master/motion_planning.py#L53) an additional condition was introduced before the drone is allowed to land.
 
 ## Next steps
 
