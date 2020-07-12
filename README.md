@@ -40,9 +40,9 @@ When you're finished, complete a detailed writeup of your solution and discuss h
 `motion_planning.py` is basically a modified version of `backyard_flyer.py` that leverages some extra functions in `planning_utils.py`. 
 
 As you may see in the following diagrams the main difference between the backyard flyer project and the motion planning project is the planning phase.
-![flow backyard Image](src="./misc/backyard_flyer_flow.png" width="500")
+![flow backyard Image](./misc/backyard_flyer_flow.png){:height="100px" width="500px"}
 In the backyard flyer project a simple rectangle is defined within the code but within the motionplanning project your first load a 2.5D Map of your environment, create a grid where the drone is allowed to fly and search for a path from a predefined starting point to a goal.
-![flow motion planning Image](src="./misc/motion_planning_flow.png" width="600")
+![flow motion planning Image](./misc/motion_planning_flow.png){:height="100px" width="500px"}
 
 You may run this by the following code.
  
