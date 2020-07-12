@@ -41,8 +41,8 @@ When you're finished, complete a detailed writeup of your solution and discuss h
 
 As you may see in the following diagrams the main difference between the backyard flyer project and the motion planning project is the planning phase.
 ![flow backyard Image](./misc/backyard_flyer_flow.png)
-![flow motion planning Image](./misc/motion_planning_flow.png)
 In the backyard flyer project a simple rectangle is defined within the code but within the motionplanning project your first load a 2.5D Map of your environment, create a grid where the drone is allowed to fly and search for a path from a predefined starting point to a goal.
+![flow motion planning Image](./misc/motion_planning_flow.png)
 
 You may run this by the following code.
  
@@ -50,12 +50,16 @@ You may run this by the following code.
 conda activate fcnd # if you haven't already sourced your Python environment, do so now.
 python motion_planning.py
 ```
-Todo: Describe `planning_utils.py`
+#### Tasks within `motion_planning.py`
+- read lat0, lon0 from colliders into floating point values
+--> The required information is stored in the first line of colliders.csv ([Code](https://github.com/StefanThaenert/FCND-Motion-Planning/blob/master/motion_planning.py#L123)
+- set home position to (lon0, lat0, 0)
+-->([Code](https://github.com/StefanThaenert/FCND-Motion-Planning/blob/master/motion_planning.py#L131)
+
+#### Tasks within `planning_utils.py`
 
 ### What about A-Star-grid-vs-graph.ipynb
 
-### Complex trajectory --> Helix
-In this project, things are set up nicely to fly right-angled trajectories, where you ascend to a particular altitude, fly a path at that fixed altitude, then land vertically. However, you have the capability to send 3D waypoints and in principle you could fly any trajectory you like. Rather than simply setting a target altitude, try sending altitude with each waypoint and set your goal location on top of a building!
 
 ### Adjust your deadbands
 Adjust the size of the deadbands around your waypoints, and even try making deadbands a function of velocity. To do this, you can simply modify the logic in the `local_position_callback()` function.
@@ -63,8 +67,6 @@ Adjust the size of the deadbands around your waypoints, and even try making dead
 
 ## Next steps
 
-### Extra Challenges
-The submission requirements for this project are laid out in the rubric, but if you feel inspired to take your project above and beyond, or maybe even keep working on it after you submit, then here are some suggestions for interesting things to try.
 
 ### Add heading commands to your waypoints
 This is a recent update! Make sure you have the [latest version of the simulator](https://github.com/udacity/FCND-Simulator-Releases/releases). In the default setup, you're sending waypoints made up of NED position and heading with heading set to 0 in the default setup. Try passing a unique heading with each waypoint. If, for example, you want to send a heading to point to the next waypoint, it might look like this:
@@ -78,8 +80,5 @@ wp2[3] = np.arctan2((wp2[1]-wp1[1]), (wp2[0]-wp1[0]))
 ```
 
 This may not be completely intuitive, but this will yield a yaw angle that is positive counterclockwise about a z-axis (down) axis that points downward.
-
-Put all of these together and make up your own crazy paths to fly! Can you fly a double helix?? 
-![Double Helix](./misc/double_helix.gif)
-
-Ok flying a double helix might seem like a silly idea, but imagine you are an autonomous first responder vehicle. You need to first fly to a particular building or location, then fly a reconnaissance pattern to survey the scene! Give it a try!
+### Complex trajectory 
+In this project, things are set up nicely to fly right-angled trajectories, where you ascend to a particular altitude, fly a path at that fixed altitude, then land vertically. However, you have the capability to send 3D waypoints and in principle you could fly any trajectory you like. Rather than simply setting a target altitude, try sending altitude with each waypoint and set your goal location on top of a building!

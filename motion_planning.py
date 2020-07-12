@@ -46,11 +46,11 @@ class MotionPlanning(Drone):
             if -1.0 * self.local_position[2] > 0.95 * self.target_position[2]:
                 self.waypoint_transition()
         elif self.flight_state == States.WAYPOINT:
-            if np.linalg.norm(self.target_position[0:2] - self.local_position[0:2]) < 1.0:
+            if np.linalg.norm(self.target_position[0:2] - self.local_position[0:2]) < np.linalg.norm(self.local_velocity[0:2])/1.1:
                 if len(self.waypoints) > 0:
                     self.waypoint_transition()
                 else:
-                    if np.linalg.norm(self.local_velocity[0:2]) < 1.0:
+                    if np.linalg.norm(self.local_velocity[0:2]) < 1.0 and np.linalg.norm(self.target_position[0:2] - self.local_position[0:2]) < 1.0:
                         self.landing_transition()
 
     def velocity_callback(self):
@@ -159,6 +159,9 @@ class MotionPlanning(Drone):
         latitude_goal =  lat0+1.1e-3 # between -2.8e-3 and 5.3e-3
         longitude_goal = lon0-0.5e-3 # between -5e-3 and 5.3e-3
 
+        #latitude_goal =  lat0+3.5e-3 # between -2.8e-3 and 5.3e-3
+        #longitude_goal = lon0-2.9e-3 # between -5e-3 and 5.3e-3
+
         goal_global = [ longitude_goal , latitude_goal , 0]
         goal_local = global_to_local (goal_global,self.global_home)
          
@@ -173,15 +176,15 @@ class MotionPlanning(Drone):
         #
         path, cost = a_star(grid, heuristic, grid_start, grid_goal)
         print(len(path), cost)
-        # TODO: prune path to minimize number of waypoints
-        # TODO (if you're feeling ambitious): Try a different approach altogether!
+        # DONE: prune path to minimize number of waypoints
+        # TODO: (if you're feeling ambitious): Try a different approach altogether!
         pruned_path = prune_path(path)
         print(len(pruned_path), pruned_path)
         # Convert path to waypoints
         waypoints = [[p[0] + north_offset, p[1] + east_offset, TARGET_ALTITUDE, 0] for p in pruned_path]
         # Set self.waypoints
         self.waypoints = waypoints
-        # TODO: send waypoints to sim (this is just for visualization of waypoints)
+        # DONE: send waypoints to sim (this is just for visualization of waypoints)
         self.send_waypoints()
 
     def start(self):
@@ -203,7 +206,7 @@ if __name__ == "__main__":
     parser.add_argument('--host', type=str, default='127.0.0.1', help="host address, i.e. '127.0.0.1'")
     args = parser.parse_args()
 
-    conn = MavlinkConnection('tcp:{0}:{1}'.format(args.host, args.port), timeout=60)
+    conn = MavlinkConnection('tcp:{0}:{1}'.format(args.host, args.port), timeout=180)
     drone = MotionPlanning(conn)
     time.sleep(1)
 

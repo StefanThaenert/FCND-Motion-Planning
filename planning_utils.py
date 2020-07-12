@@ -1,6 +1,7 @@
 from enum import Enum
 from queue import PriorityQueue
 import numpy as np
+import math
 
 
 def create_grid(data, drone_altitude, safety_distance):
@@ -154,7 +155,7 @@ def a_star(grid, h, start, goal):
 def heuristic(position, goal_position):
     return np.linalg.norm(np.array(position) - np.array(goal_position))
 
-def prune_path(path, eps):
+def prune_path(path, eps=5):
     pruned_path = [p for p in path]
     
     i = 0
@@ -185,3 +186,14 @@ def find_start_goal(skel, start, goal):
     goal_min_dist = np.linalg.norm(np.array(goal) - np.array(skel_cells), axis=1).argmin()
     near_goal = skel_cells[goal_min_dist]
     return near_start, near_goal
+
+def helix(height=5, diameter=10, sloop=1):
+    path = []
+    imax=height/sloop*12
+    for i in range(imax):
+        x=sin(math.pi/6*i)
+        y=cos(math.pi/6*i)
+        z=sloop/12*i
+        p=[x, y, z]
+        path.append(p)
+    return path
